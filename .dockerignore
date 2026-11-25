@@ -1,0 +1,15 @@
+.git
+.gitignore
+.dockerignore
+.env
+.env.*
+!.env.example
+AGENTS.MD
+prd.md
+README.md
+docker-compose.yml
+Dockerfile
+**/.DS_Store
+**/Thumbs.db
+public/uploads/*
+!public/uploads/.gitkeep
