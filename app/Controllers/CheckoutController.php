@@ -85,7 +85,7 @@ class CheckoutController extends Controller
         }
 
         $this->view('customer/checkout', [
-            'pageTitle' => 'Checkout',
+            'pageTitle' => 'Checkout Pesanan',
             'cart' => $cart,
             'bookings' => $this->orders->activeBookingsForUser($userId),
             'errors' => $errors,
@@ -107,7 +107,7 @@ class CheckoutController extends Controller
         }
 
         http_response_code(400);
-        echo '400 - Invalid CSRF token';
+        echo '400 - Token CSRF tidak valid.';
         return false;
     }
 }

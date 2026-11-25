@@ -7,7 +7,7 @@ class AdminCustomerController extends Controller
         AuthHelper::requireAdmin();
 
         $this->view('admin/customers', [
-            'pageTitle' => 'Manage Customers',
+            'pageTitle' => 'Kelola Pelanggan',
             'customers' => (new AdminCustomer())->all(),
         ]);
     }

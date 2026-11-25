@@ -13,7 +13,7 @@ class AdminTableController extends Controller
     {
         AuthHelper::requireAdmin();
         $this->view('admin/tables', [
-            'pageTitle' => 'Manage Tables',
+            'pageTitle' => 'Kelola Meja',
             'tables' => $this->tables->all(),
             'errors' => [],
             'formData' => null,
@@ -27,7 +27,7 @@ class AdminTableController extends Controller
         $table = $id ? $this->tables->find((int) $id) : null;
         if (!$table) {
             http_response_code(404);
-            echo '404 - Table not found';
+            echo '404 - Meja tidak ditemukan.';
             return;
         }
 
@@ -72,7 +72,7 @@ class AdminTableController extends Controller
         $table = $id ? $this->tables->find((int) $id) : null;
         if (!$table) {
             http_response_code(404);
-            echo '404 - Table not found';
+            echo '404 - Meja tidak ditemukan.';
             return;
         }
 
@@ -108,7 +108,7 @@ class AdminTableController extends Controller
         $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT);
         if (!$id || !$this->tables->find((int) $id)) {
             http_response_code(404);
-            echo '404 - Table not found';
+            echo '404 - Meja tidak ditemukan.';
             return;
         }
 
@@ -145,7 +145,7 @@ class AdminTableController extends Controller
     private function render(array $formData, array $errors = []): void
     {
         $this->view('admin/tables', [
-            'pageTitle' => 'Manage Tables',
+            'pageTitle' => 'Kelola Meja',
             'tables' => $this->tables->all(),
             'errors' => $errors,
             'formData' => $formData,
@@ -164,7 +164,7 @@ class AdminTableController extends Controller
         }
 
         http_response_code(400);
-        echo '400 - Invalid CSRF token';
+        echo '400 - Token CSRF tidak valid.';
         return false;
     }
 }

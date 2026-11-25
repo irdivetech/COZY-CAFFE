@@ -23,7 +23,7 @@ class AdminCategoryController extends Controller
 
         if (!$category) {
             http_response_code(404);
-            echo '404 - Category not found';
+            echo '404 - Kategori tidak ditemukan.';
             return;
         }
 
@@ -69,7 +69,7 @@ class AdminCategoryController extends Controller
         $category = $id ? $this->categories->find((int) $id) : null;
         if (!$category) {
             http_response_code(404);
-            echo '404 - Category not found';
+            echo '404 - Kategori tidak ditemukan.';
             return;
         }
 
@@ -104,7 +104,7 @@ class AdminCategoryController extends Controller
         $category = $id ? $this->categories->find((int) $id) : null;
         if (!$category) {
             http_response_code(404);
-            echo '404 - Category not found';
+            echo '404 - Kategori tidak ditemukan.';
             return;
         }
 
@@ -130,7 +130,7 @@ class AdminCategoryController extends Controller
     private function render(?array $category = null, array $errors = []): void
     {
         $this->view('admin/categories', [
-            'pageTitle' => 'Manage Categories',
+            'pageTitle' => 'Kelola Kategori',
             'categories' => $this->categories->all(),
             'category' => $category,
             'errors' => $errors,
@@ -167,7 +167,7 @@ class AdminCategoryController extends Controller
         }
 
         http_response_code(400);
-        echo '400 - Invalid CSRF token';
+        echo '400 - Token CSRF tidak valid.';
         return false;
     }
 }

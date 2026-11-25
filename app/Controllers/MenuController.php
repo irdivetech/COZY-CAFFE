@@ -45,7 +45,7 @@ class MenuController extends Controller
         }
 
         $this->view('customer/menu', [
-            'pageTitle' => 'Our Menu',
+            'pageTitle' => 'Katalog Menu',
             'menus' => $filterError === null ? $this->menus->available(0, $categoryId, $search) : [],
             'categories' => $this->categories->all(),
             'selectedCategory' => $categoryId,
@@ -65,7 +65,7 @@ class MenuController extends Controller
 
         if (!$menu) {
             http_response_code(404);
-            echo '404 - Menu not found';
+            echo '404 - Menu tidak ditemukan.';
             return;
         }
 

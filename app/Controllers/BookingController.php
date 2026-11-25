@@ -42,7 +42,7 @@ class BookingController extends Controller
         AuthHelper::requireCustomer();
         if (!SecurityHelper::verifyCsrfToken()) {
             http_response_code(400);
-            echo '400 - Invalid CSRF token';
+            echo '400 - Token CSRF tidak valid.';
             return;
         }
 
@@ -94,7 +94,7 @@ class BookingController extends Controller
         AuthHelper::requireCustomer();
         $user = AuthHelper::currentUser();
         $this->view('customer/my_bookings', [
-            'pageTitle' => 'My Bookings',
+            'pageTitle' => 'Reservasi Saya',
             'bookings' => $this->bookings->forUser((int) $user['id']),
             'currentUser' => $user,
             'cartCount' => (new CartModel())->itemCount((int) $user['id']),
@@ -105,7 +105,7 @@ class BookingController extends Controller
     {
         $user = AuthHelper::currentUser();
         $this->view('customer/reservation', [
-            'pageTitle' => 'Reserve a Table',
+            'pageTitle' => 'Reservasi Meja',
             'errors' => $errors,
             'formData' => $formData,
             'currentUser' => $user,

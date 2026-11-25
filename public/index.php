@@ -71,6 +71,7 @@ $router->get('/admin/menus/new', [AdminMenuController::class, 'createForm']);
 $router->get('/admin/menus/edit', [AdminMenuController::class, 'editForm']);
 $router->post('/admin/menus/create', [AdminMenuController::class, 'create']);
 $router->post('/admin/menus/update', [AdminMenuController::class, 'update']);
+$router->post('/admin/menus/toggle', [AdminMenuController::class, 'toggle']);
 $router->post('/admin/menus/disable', [AdminMenuController::class, 'disable']);
 
 $router->get('/admin/tables', [AdminTableController::class, 'index']);

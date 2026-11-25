@@ -16,7 +16,7 @@ class AuthController extends Controller
         }
 
         $this->view('auth/login', [
-            'pageTitle' => 'Login',
+            'pageTitle' => 'Masuk',
             'error' => null,
             'email' => '',
         ]);
@@ -27,7 +27,7 @@ class AuthController extends Controller
         if (!SecurityHelper::verifyCsrfToken()) {
             http_response_code(400);
             $this->view('auth/login', [
-                'pageTitle' => 'Login',
+                'pageTitle' => 'Masuk',
                 'error' => 'Sesi formulir tidak valid. Muat ulang halaman dan coba lagi.',
                 'email' => '',
             ]);
@@ -43,7 +43,7 @@ class AuthController extends Controller
         if (!$user || !password_verify($password, $user['password'])) {
             http_response_code(422);
             $this->view('auth/login', [
-                'pageTitle' => 'Login',
+                'pageTitle' => 'Masuk',
                 'error' => 'Email atau password tidak sesuai.',
                 'email' => $email,
             ]);
@@ -70,7 +70,7 @@ class AuthController extends Controller
         }
 
         $this->view('auth/register', [
-            'pageTitle' => 'Register',
+            'pageTitle' => 'Daftar Akun',
             'errors' => [],
             'name' => '',
             'email' => '',
@@ -82,7 +82,7 @@ class AuthController extends Controller
         if (!SecurityHelper::verifyCsrfToken()) {
             http_response_code(400);
             $this->view('auth/register', [
-                'pageTitle' => 'Register',
+                'pageTitle' => 'Daftar Akun',
                 'errors' => ['Sesi formulir tidak valid. Muat ulang halaman dan coba lagi.'],
                 'name' => '',
                 'email' => '',
@@ -114,7 +114,7 @@ class AuthController extends Controller
         if ($errors) {
             http_response_code(422);
             $this->view('auth/register', [
-                'pageTitle' => 'Register',
+                'pageTitle' => 'Daftar Akun',
                 'errors' => $errors,
                 'name' => $name,
                 'email' => $email,
@@ -131,7 +131,7 @@ class AuthController extends Controller
 
             http_response_code(422);
             $this->view('auth/register', [
-                'pageTitle' => 'Register',
+                'pageTitle' => 'Daftar Akun',
                 'errors' => ['Email sudah terdaftar.'],
                 'name' => $name,
                 'email' => $email,
@@ -147,7 +147,7 @@ class AuthController extends Controller
     {
         if (!SecurityHelper::verifyCsrfToken()) {
             http_response_code(400);
-            echo '400 - Invalid CSRF token';
+            echo '400 - Token CSRF tidak valid.';
             return;
         }
 

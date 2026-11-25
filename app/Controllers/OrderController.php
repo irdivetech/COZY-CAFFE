@@ -9,7 +9,7 @@ class OrderController extends Controller
         $userId = (int) $user['id'];
 
         $this->view('customer/my_orders', [
-            'pageTitle' => 'My Orders',
+            'pageTitle' => 'Pesanan Saya',
             'orders' => (new OrderModel())->forUser($userId),
             'currentUser' => $user,
             'cartCount' => (new CartModel())->itemCount($userId),

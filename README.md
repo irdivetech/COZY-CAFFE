@@ -1,98 +1,137 @@
-# CozyCafe
+<!--  --># CozyCafe — Sistem Pemesanan Online & Reservasi Meja
 
-CozyCafe is a native PHP 8.2, MySQL 8, and Apache cafe ordering and table reservation application. It does not use a PHP framework or Composer.
+CozyCafe adalah aplikasi berbasis web dengan arsitektur **Native PHP 8.2 (OOP)**, **MySQL 8.0**, dan **Apache** untuk pemesanan makanan/minuman online serta reservasi meja cafe secara real-time. Aplikasi ini dibangun tanpa framework PHP (seperti Laravel/CodeIgniter) dan tanpa Composer sesuai panduan PRD.
 
-## Requirements
+---
 
-- PHP 8.x with PDO MySQL for local XAMPP use.
-- MySQL 8.0.
-- Docker Engine with the Docker Compose plugin for containerized local use.
+## Fitur Utama
 
-## Run locally with XAMPP
+- **Customer:**
+  - Pendaftaran akun & login pelanggan.
+  - Katalog menu dengan pencarian dan filter kategori (Coffee, Non-Coffee, Foods, Snacks, Desserts).
+  - Keranjang belanja (Shopping Cart) dengan kalkulasi harga dan diskon promo di sisi server.
+  - Alur Checkout untuk **Takeaway** (Bawa Pulang) dan **Dine-in** (Makan di Tempat dengan wajib memilih reservasi meja).
+  - Reservasi meja mandiri dengan mesin **Anti Double-Booking** (durasi 2 jam, validasi kapasitas, pengecekan jam operasional, dan penutupan reservasi).
+  - Riwayat pesanan & pelacakan status pesanan real-time (*Pending* → *Confirmed* → *Preparing* → *Ready* → *Completed* / *Cancelled*).
+  - Riwayat reservasi meja.
+  - Sistem notifikasi internal di dalam web.
+  - Pengelolaan profil dan perubahan kata sandi.
 
-1. Copy the project into `C:\xampp\htdocs\cozycoffe`.
-2. Start Apache and MySQL from the XAMPP Control Panel.
-3. Import `database/cozycafe.sql` in phpMyAdmin. The script creates the `cozycafe` database and its initial schema and seed data. Importing it again drops and recreates the application tables.
-4. The default local connection settings in `config/database.php` use `localhost:3306`, database `cozycafe`, user `root`, and an empty password. Set `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and `DB_PASS` in the PHP environment if your local MySQL credentials differ.
-5. Open `http://localhost/cozycoffe/public/`.
+- **Admin (Dashboard):**
+  - Ringkasan statistik operasional: Total Pesanan, Total Reservasi, Total Pelanggan, dan Pendapatan Lunas (*Paid*).
+  - Kelola Menu (CRUD, upload foto JPG/PNG/WEBP maks 2MB, atur harga, status ketersediaan).
+  - Kelola Kategori (Coffee, Non-Coffee, Foods, Snacks, Desserts).
+  - Kelola Pesanan (filter status, pembaruan status pesanan, dan konfirmasi pembayaran tunai/Cash).
+  - Kelola Reservasi (daftar booking, ubah status ke *Completed* atau *Cancelled*).
+  - Kelola Meja (tambah meja, kapasitas kursi, toggle aktif/nonaktif).
+  - Kelola Pelanggan (daftar pelanggan beserta total transaksi dan booking).
+  - Kelola Promosi (diskon persentase atau nominal tetap, periode promo, checklist menu promo).
+  - Kelola Jam Operasional (jam buka, jam tutup, dan status libur tiap hari Minggu s.d Sabtu).
+  - Kelola Penutupan Reservasi (tutup reservasi pada rentang tanggal tertentu untuk libur/renovasi/acara).
+  - Laporan Penjualan & Operasional (filter tanggal, total omzet lunas, Top 5 Menu Terlaris, dan tabel transaksi ramah cetak/print-friendly).
+  - Notifikasi Admin & Pengelolaan Profil Admin.
 
-The sample accounts created by the SQL seed are:
+---
 
-- Admin: `admin@cozycafe.com` / `password123`
-- Customer: `customer@cozycafe.com` / `password123`
+## Kebutuhan Sistem
 
-Change the default Admin password after the first login.
+- **Lokal (XAMPP):**
+  - PHP 8.0 - 8.2+ dengan ekstensi `pdo` dan `pdo_mysql` aktif.
+  - MySQL 8.0+ / MariaDB.
+  - Web browser modern.
+- **Container (Docker):**
+  - Docker Desktop atau Docker Engine dengan plugin Docker Compose.
 
-## Run locally with Docker Compose
+---
 
-Docker Compose builds the PHP/Apache image, starts a separate MySQL 8.0 service, imports the SQL seed on the database's first initialization, and persists both database data and uploads in named volumes.
+## Menjalankan Proyek Secara Lokal (XAMPP)
 
-1. From the project root, set strong local database passwords in your shell or a local `.env` file. For example:
-
-   ```env
-   DB_USER=cozycafe_user
-   DB_PASS=replace-with-a-strong-local-password
-   MYSQL_ROOT_PASSWORD=replace-with-a-different-strong-password
-   APP_PORT=8080
+1. Salin folder proyek ini ke dalam direktori `htdocs` XAMPP, contoh: `C:\xampp\htdocs\cozycafe`.
+2. Buka **XAMPP Control Panel**, lalu jalankan service **Apache** dan **MySQL**.
+3. Buka **phpMyAdmin** (`http://localhost/phpmyadmin/`).
+4. Import file database: `database/cozycafe.sql`. File ini otomatis membuat database `cozycafe`, seluruh 15 tabel, dan data seeder awal.
+5. Konfigurasi database default di `config/database.php` menggunakan:
+   - Host: `localhost`
+   - Port: `3306`
+   - Database: `cozycafe`
+   - User: `root`
+   - Password: `""` (kosong)
+   *(Jika menggunakan kredensial berbeda, sesuaikan environment variables `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASS`).*
+6. Buka aplikasi di browser:
+   ```
+   http://localhost/cozycafe/public/
    ```
 
-   `.env` is ignored by Docker build context and should not be committed.
+### Akun Awal (Seeder Default)
 
-2. Build and start the services:
+- **Akun Admin:**
+  - Email: `admin@cozycafe.com`
+  - Password: `password123`
+  - URL Akses: `http://localhost/cozycafe/public/login` (otomatis diarahkan ke `/admin/dashboard`)
+- **Akun Pelanggan:**
+  - Email: `customer@cozycafe.com`
+  - Password: `password123`
 
+> **Catatan Keamanan:** Segera ubah kata sandi akun Admin setelah berhasil login pertama kali melalui menu **Profil Admin**.
+
+---
+
+## Menjalankan Proyek dengan Docker Compose
+
+1. Buka terminal pada root direktori proyek.
+2. Buat file `.env` jika ingin mengganti kredensial database lokal:
+   ```env
+   DB_USER=cozycafe_user
+   DB_PASS=cozycafe_local_password
+   MYSQL_ROOT_PASSWORD=cozycafe_root_local_password
+   APP_PORT=8080
+   ```
+3. Bangun (*build*) dan jalankan container:
    ```powershell
    docker compose up --build -d
    ```
-
-3. Open `http://localhost:8080/`.
-4. Follow the initial-login guidance above. Uploaded menu images and MySQL data persist across container rebuilds in `uploads_data` and `mysql_data`.
-5. Stop the services with `docker compose down`. To preserve database and uploads, do not add `--volumes`.
-
-MySQL only runs the initialization SQL when its data directory is empty. To re-import the schema for a disposable local environment, remove the Compose volumes with `docker compose down --volumes` and start the services again. This permanently deletes the local Compose database and uploaded files.
-
-## Deploy to Dokploy
-
-### 1. Create the project and database
-
-1. In Dokploy, create a project named `CozyCafe`.
-2. Add and deploy a MySQL 8.0 database service to that project.
-3. Record the database's internal hostname, database name, user, and strong password.
-4. Import `database/cozycafe.sql` into the database once using a database client or the Dokploy terminal. The Compose database auto-import is for local Compose use; Dokploy's separate database service is initialized independently.
-
-### 2. Deploy the application
-
-1. Push the project to a Git repository and connect that repository and deployment branch in Dokploy.
-2. Add an Application service and choose **Dockerfile** as its build type. Set the Dockerfile path to `./Dockerfile` and the build context to the project root.
-3. Configure these application environment variables with the credentials from the database service:
-
-   ```env
-   DB_HOST=<internal-database-hostname>
-   DB_PORT=3306
-   DB_NAME=cozycafe
-   DB_USER=<database-user>
-   DB_PASS=<strong-database-password>
-   APP_ENV=production
+4. Buka aplikasi di browser:
+   ```
+   http://localhost:8080/
+   ```
+5. Foto menu yang diunggah dan database MySQL akan tersimpan secara persisten pada Docker Volume (`uploads_data` dan `mysql_data`).
+6. Untuk menghentikan container:
+   ```powershell
+   docker compose down
    ```
 
-4. Add a persistent volume mount for menu uploads:
+---
 
-   - Volume: `cozycafe-uploads`
-   - Container path: `/var/www/html/public/uploads`
+## Panduan Deployment ke Dokploy
 
-5. Configure the application domain to route to container port `80` and enable HTTPS/Let's Encrypt.
-6. Deploy the application and check the build and runtime logs.
+Aplikasi CozyCafe telah dilengkapi dengan `Dockerfile` dan konfigurasi *cloud-ready* sehingga siap dideploy ke **Dokploy**.
 
-### 3. Verify the deployment
+### Langkah 1: Buat Project & Database MySQL di Dokploy
+1. Masuk ke dashboard Dokploy, klik **Create Project** dan beri nama `CozyCafe`.
+2. Klik **Create Service** → pilih **Database** → pilih **MySQL**.
+3. Catat kredensial yang dibuat oleh Dokploy:
+   - Internal Host: (misal: `cozycafe-db`)
+   - Database: `cozycafe`
+   - User: `cozycafe_user`
+   - Password: `<password-database>`
+4. Jalankan service database, lalu import file `database/cozycafe.sql` ke database tersebut.
 
-1. Open the configured HTTPS domain and confirm the application connects to MySQL.
-2. Sign in with the seeded Admin account, then change its default password.
-3. Create a menu and upload an image; redeploy the app and confirm the image remains available.
-4. Test customer registration/login, a reservation, and both Takeaway and Dine-in checkout flows.
-5. Confirm orders and cash payments from the Admin order page.
-
-## Database and uploads
-
-- Local XAMPP database environment variables are optional when using the default local credentials.
-- Docker Compose supplies the database connection variables to the app container and keeps MySQL private to the Compose network.
-- The application container exposes Apache on port `80`; Compose maps it to host port `8080` by default.
-- For Dokploy, use its internal database hostname and a persistent volume mounted at `/var/www/html/public/uploads`.
+### Langkah 2: Deploy Aplikasi CozyCafe Web
+1. Klik **Create Service** → pilih **Application**.
+2. Hubungkan repositori Git proyek CozyCafe (pilih branch `main`).
+3. Pada opsi **Build Type**, pilih **Dockerfile** (path: `./Dockerfile`).
+4. Masuk ke tab **Environment**, lalu tambahkan konfigurasi database:
+   ```env
+   DB_HOST=cozycafe-db
+   DB_PORT=3306
+   DB_NAME=cozycafe
+   DB_USER=cozycafe_user
+   DB_PASS=<password-database>
+   APP_ENV=production
+   ```
+5. Masuk ke tab **Mounts / Volumes**, tambahkan volume persisten agar foto menu tidak hilang saat redeploy:
+   - **Type:** Volume
+   - **Name:** `cozycafe-uploads`
+   - **Path (Container):** `/var/www/html/public/uploads`
+6. Masuk ke tab **Domains**, tentukan domain/subdomain Anda (misal `cafe.domainanda.com`), arahkan Container Port ke `80`, dan aktifkan sertifikat SSL (Let's Encrypt).
+7. Klik **Deploy** dan pantau log build hingga aplikasi berstatus *Running*.

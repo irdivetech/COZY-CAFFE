@@ -8,7 +8,7 @@ class AdminDashboardController extends Controller
         $dashboard = new AdminDashboard();
 
         $this->view('admin/dashboard', [
-            'pageTitle' => 'Dashboard',
+            'pageTitle' => 'Dashboard Admin',
             'summary' => $dashboard->summary(),
             'recentOrders' => $dashboard->recentOrders(),
             'recentBookings' => $dashboard->recentBookings(),

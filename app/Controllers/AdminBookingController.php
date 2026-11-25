@@ -13,7 +13,7 @@ class AdminBookingController extends Controller
     {
         AuthHelper::requireAdmin();
         $this->view('admin/bookings', [
-            'pageTitle' => 'Manage Bookings',
+            'pageTitle' => 'Kelola Reservasi',
             'bookings' => $this->bookings->allForAdmin(),
         ]);
     }
@@ -23,7 +23,7 @@ class AdminBookingController extends Controller
         AuthHelper::requireAdmin();
         if (!SecurityHelper::verifyCsrfToken()) {
             http_response_code(400);
-            echo '400 - Invalid CSRF token';
+            echo '400 - Token CSRF tidak valid.';
             return;
         }
 

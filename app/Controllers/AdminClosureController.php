@@ -22,7 +22,7 @@ class AdminClosureController extends Controller
         $closure = $id ? $this->closures->find((int) $id) : null;
         if (!$closure) {
             http_response_code(404);
-            echo '404 - Reservation closure not found';
+            echo '404 - Penutupan reservasi tidak ditemukan.';
             return;
         }
 
@@ -60,7 +60,7 @@ class AdminClosureController extends Controller
         $existing = $id ? $this->closures->find((int) $id) : null;
         if (!$existing) {
             http_response_code(404);
-            echo '404 - Reservation closure not found';
+            echo '404 - Penutupan reservasi tidak ditemukan.';
             return;
         }
 
@@ -93,7 +93,7 @@ class AdminClosureController extends Controller
         $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT);
         if (!$id || !$this->closures->find((int) $id)) {
             http_response_code(404);
-            echo '404 - Reservation closure not found';
+            echo '404 - Penutupan reservasi tidak ditemukan.';
             return;
         }
 
@@ -147,7 +147,7 @@ class AdminClosureController extends Controller
     private function render(?array $closure = null, array $errors = []): void
     {
         $this->view('admin/closures', [
-            'pageTitle' => 'Reservation Closures',
+            'pageTitle' => 'Penutupan Reservasi',
             'closures' => $this->closures->all(),
             'closure' => $closure,
             'errors' => $errors,
@@ -166,7 +166,7 @@ class AdminClosureController extends Controller
         }
 
         http_response_code(400);
-        echo '400 - Invalid CSRF token';
+        echo '400 - Token CSRF tidak valid.';
         return false;
     }
 }

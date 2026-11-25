@@ -1,5 +1,5 @@
 <?php
-$pageTitle = $pageTitle ?? 'My Bookings';
+$pageTitle = $pageTitle ?? 'Reservasi Saya';
 $bookings = $bookings ?? [];
 $escape = static fn (?string $value): string =>
     htmlspecialchars($value ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -7,36 +7,66 @@ $baseUrl = rtrim(str_replace('/index.php', '', $_SERVER['SCRIPT_NAME'] ?? ''), '
 if ($baseUrl === '/') {
     $baseUrl = '';
 }
+$statusBadge = static fn (string $status): string => match ($status) {
+    'Completed' => 'text-bg-success',
+    'Confirmed' => 'text-bg-primary',
+    'Cancelled' => 'text-bg-danger',
+    default => 'text-bg-secondary',
+};
+$statusLabel = static fn (string $status): string => match ($status) {
+    'Confirmed' => 'Dikonfirmasi',
+    'Completed' => 'Selesai',
+    'Cancelled' => 'Dibatalkan',
+    default => $status,
+};
 ob_start();
 ?>
 <section class="container py-5">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-            <p class="text-uppercase small text-muted mb-1">Your visits</p>
-            <h1 class="section-title h2 mb-0">My Bookings</h1>
+            <p class="text-uppercase small text-muted mb-1">Jadwal Meja</p>
+            <h1 class="section-title h2 mb-0">Riwayat Reservasi Saya</h1>
         </div>
-        <a class="btn btn-coffee" href="<?= $escape($baseUrl) ?>/reservation">Make a Reservation</a>
+        <a class="btn btn-coffee" href="<?= $escape($baseUrl) ?>/reservation"><i class="fa-solid fa-calendar-plus me-2"></i>Buat Reservasi Baru</a>
     </div>
-    <section class="cozy-card">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead><tr><th>Date</th><th>Time</th><th>Table</th><th>Guests</th><th>Status</th><th>Notes</th></tr></thead>
-                <tbody>
-                <?php foreach ($bookings as $booking): ?>
-                    <tr>
-                        <td><?= $escape($booking['booking_date']) ?></td>
-                        <td><?= $escape(substr($booking['start_time'], 0, 5)) ?>–<?= $escape(substr($booking['end_time'], 0, 5)) ?></td>
-                        <td><?= $escape($booking['table_number']) ?></td>
-                        <td><?= (int) $booking['guest_count'] ?></td>
-                        <td><span class="badge-status <?= $booking['status'] === 'Confirmed' ? 'badge-confirmed' : ($booking['status'] === 'Cancelled' ? 'badge-cancelled' : 'badge-completed') ?>"><?= $escape($booking['status']) ?></span></td>
-                        <td><?= nl2br($escape($booking['notes'] ?? '')) ?></td>
-                    </tr>
-                <?php endforeach; ?>
-                <?php if (!$bookings): ?><tr><td colspan="6" class="text-center text-muted py-5">You have no bookings yet.</td></tr><?php endif; ?>
-                </tbody>
-            </table>
+
+    <?php if (!$bookings): ?>
+        <div class="cozy-card p-5 text-center">
+            <i class="fa-solid fa-chair fa-3x text-muted mb-3"></i>
+            <h2 class="h5">Belum Ada Riwayat Reservasi</h2>
+            <p class="text-muted">Anda belum memiliki jadwal reservasi meja di CozyCafe.</p>
+            <a class="btn btn-coffee mt-2" href="<?= $escape($baseUrl) ?>/reservation">Reservasi Meja Sekarang</a>
         </div>
-    </section>
+    <?php else: ?>
+        <div class="cozy-card">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Jam (Durasi 2 Jam)</th>
+                            <th>Nomor Meja</th>
+                            <th>Jumlah Tamu</th>
+                            <th>Status</th>
+                            <th>Catatan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($bookings as $b): ?>
+                        <tr>
+                            <td class="fw-semibold"><i class="fa-regular fa-calendar me-1 text-coffee"></i><?= $escape($b['booking_date']) ?></td>
+                            <td><?= $escape(substr($b['start_time'], 0, 5)) ?> - <?= $escape(substr($b['end_time'], 0, 5)) ?></td>
+                            <td><span class="badge bg-light text-dark border">Meja <?= $escape($b['table_number']) ?></span></td>
+                            <td><?= (int) $b['guest_count'] ?> orang</td>
+                            <td><span class="badge <?= $statusBadge($b['status']) ?>"><?= $statusLabel($b['status']) ?></span></td>
+                            <td><?= $b['notes'] ? $escape($b['notes']) : '<span class="text-muted fst-italic">-</span>' ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <?php endif; ?>
 </section>
 <?php
 $content = ob_get_clean();

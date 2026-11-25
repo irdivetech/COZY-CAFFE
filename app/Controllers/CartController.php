@@ -16,7 +16,7 @@ class CartController extends Controller
         $cart = $this->cart->getCart($userId);
 
         $this->view('customer/cart', [
-            'pageTitle' => 'My Cart',
+            'pageTitle' => 'Keranjang Belanja',
             'cart' => $cart,
             'cartCount' => $cart['item_count'],
             'currentUser' => AuthHelper::currentUser(),
@@ -153,7 +153,7 @@ class CartController extends Controller
         }
 
         http_response_code(400);
-        echo '400 - Invalid CSRF token';
+        echo '400 - Token CSRF tidak valid.';
         return false;
     }
 }

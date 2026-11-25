@@ -124,10 +124,27 @@ class Menu extends Model
         $statement->execute($parameters);
     }
 
+    public function toggle(int $id): bool
+    {
+        $check = $this->db->prepare('SELECT is_available FROM menus WHERE id = :id LIMIT 1');
+        $check->execute(['id' => $id]);
+        $current = (int) $check->fetchColumn();
+        $next = $current === 1 ? 0 : 1;
+
+        $statement = $this->db->prepare(
+            'UPDATE menus SET is_available = :is_available WHERE id = :id'
+        );
+        $statement->execute([
+            'is_available' => $next,
+            'id' => $id,
+        ]);
+
+        return $next === 1;
+    }
+
     public function disable(int $id): void
     {
-        $statement = $this->db->prepare('UPDATE menus SET is_available = 0 WHERE id = :id');
-        $statement->execute(['id' => $id]);
+        $this->toggle($id);
     }
 
     private function catalogSelect(): string

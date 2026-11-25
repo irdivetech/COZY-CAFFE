@@ -1,5 +1,5 @@
 <?php
-$pageTitle = $pageTitle ?? 'Login';
+$pageTitle = $pageTitle ?? 'Masuk';
 $error = $error ?? null;
 $email = $email ?? '';
 $escape = static fn (?string $value): string =>
@@ -21,13 +21,13 @@ if ($baseUrl === '/') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?= $escape($baseUrl) ?>/assets/css/style.css" rel="stylesheet">
 </head>
-<body class="d-flex flex-column">
+<body class="d-flex flex-column min-vh-100">
 <main class="container flex-grow-1 d-flex align-items-center justify-content-center py-5">
     <section class="cozy-card w-100" style="max-width: 460px;">
         <div class="p-4 p-md-5">
             <div class="text-center mb-4">
-                <a class="brand-text fs-3" href="<?= $escape($baseUrl) ?>/">CozyCafe</a>
-                <p class="text-muted mb-0 mt-2">Login ke akun Anda</p>
+                <a class="brand-text fs-3 text-decoration-none" href="<?= $escape($baseUrl) ?>/">CozyCafe</a>
+                <p class="text-muted mb-0 mt-2">Masuk ke akun Anda</p>
             </div>
             <?php if ($error): ?>
                 <div class="alert alert-danger" role="alert"><?= $escape($error) ?></div>
@@ -40,17 +40,17 @@ if ($baseUrl === '/') {
             <form method="post" action="<?= $escape($baseUrl) ?>/login">
                 <input type="hidden" name="_csrf_token" value="<?= $escape(SecurityHelper::generateCsrfToken()) ?>">
                 <div class="mb-3">
-                    <label class="form-label" for="email">Email</label>
-                    <input class="form-control" id="email" name="email" type="email" maxlength="191" autocomplete="email" value="<?= $escape($email) ?>" required>
+                    <label class="form-label" for="email">Alamat Email</label>
+                    <input class="form-control" id="email" name="email" type="email" maxlength="191" autocomplete="email" placeholder="nama@email.com" value="<?= $escape($email) ?>" required>
                 </div>
                 <div class="mb-4">
-                    <label class="form-label" for="password">Password</label>
-                    <input class="form-control" id="password" name="password" type="password" autocomplete="current-password" required>
+                    <label class="form-label" for="password">Kata Sandi</label>
+                    <input class="form-control" id="password" name="password" type="password" autocomplete="current-password" placeholder="Masukkan kata sandi" required>
                 </div>
-                <button class="btn btn-coffee w-100" type="submit">Login</button>
+                <button class="btn btn-coffee w-100" type="submit">Masuk</button>
             </form>
             <p class="text-center text-muted mt-4 mb-0">
-                Belum punya akun? <a href="<?= $escape($baseUrl) ?>/register">Daftar sebagai customer</a>
+                Belum punya akun? <a href="<?= $escape($baseUrl) ?>/register" class="text-decoration-none">Daftar sekarang</a>
             </p>
         </div>
     </section>

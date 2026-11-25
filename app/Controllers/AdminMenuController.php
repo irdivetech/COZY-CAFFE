@@ -15,7 +15,7 @@ class AdminMenuController extends Controller
     {
         AuthHelper::requireAdmin();
         $this->view('admin/menus', [
-            'pageTitle' => 'Manage Menu',
+            'pageTitle' => 'Kelola Menu',
             'menus' => $this->menus->allForAdmin(),
         ]);
     }
@@ -45,7 +45,7 @@ class AdminMenuController extends Controller
         $menu = $id ? $this->menus->findForAdmin((int) $id) : null;
         if (!$menu) {
             http_response_code(404);
-            echo '404 - Menu not found';
+            echo '404 - Menu tidak ditemukan.';
             return;
         }
 
@@ -112,7 +112,7 @@ class AdminMenuController extends Controller
         $existing = $id ? $this->menus->findForAdmin((int) $id) : null;
         if (!$existing) {
             http_response_code(404);
-            echo '404 - Menu not found';
+            echo '404 - Menu tidak ditemukan.';
             return;
         }
 
@@ -166,7 +166,7 @@ class AdminMenuController extends Controller
         $this->redirect($this->appBaseUrl() . '/admin/menus');
     }
 
-    public function disable(): void
+    public function toggle(): void
     {
         AuthHelper::requireAdmin();
         if (!$this->verifyCsrf()) {
@@ -176,13 +176,22 @@ class AdminMenuController extends Controller
         $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT);
         if (!$id || !$this->menus->findForAdmin((int) $id)) {
             http_response_code(404);
-            echo '404 - Menu not found';
+            echo '404 - Menu tidak ditemukan.';
             return;
         }
 
-        $this->menus->disable((int) $id);
-        FlashHelper::success('Menu dinonaktifkan dan tidak lagi ditampilkan ke pelanggan.');
+        $isAvailable = $this->menus->toggle((int) $id);
+        FlashHelper::success(
+            $isAvailable
+                ? 'Menu berhasil diaktifkan dan dapat dipesan pelanggan.'
+                : 'Menu dinonaktifkan dan tidak lagi ditampilkan ke pelanggan.'
+        );
         $this->redirect($this->appBaseUrl() . '/admin/menus');
+    }
+
+    public function disable(): void
+    {
+        $this->toggle();
     }
 
     private function postedMenu(): array
@@ -274,7 +283,7 @@ class AdminMenuController extends Controller
     private function renderForm(array $menu, array $errors = []): void
     {
         $this->view('admin/menu_form', [
-            'pageTitle' => isset($menu['id']) ? 'Edit Menu' : 'Add Menu',
+            'pageTitle' => isset($menu['id']) ? 'Ubah Menu' : 'Tambah Menu Baru',
             'menu' => $menu,
             'categories' => $this->categories->all(),
             'errors' => $errors,
@@ -288,7 +297,7 @@ class AdminMenuController extends Controller
         }
 
         http_response_code(400);
-        echo '400 - Invalid CSRF token';
+        echo '400 - Token CSRF tidak valid.';
         return false;
     }
 }

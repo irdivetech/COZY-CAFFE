@@ -9,7 +9,7 @@ class Controller
 
         if (!is_file($file)) {
             http_response_code(500);
-            echo '500 - View not found';
+            echo '500 - Tampilan view tidak ditemukan.';
             return;
         }
 

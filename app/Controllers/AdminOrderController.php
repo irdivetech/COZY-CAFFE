@@ -26,7 +26,7 @@ class AdminOrderController extends Controller
         }
 
         $this->view('admin/orders', [
-            'pageTitle' => 'Manage Orders',
+            'pageTitle' => 'Kelola Pesanan',
             'orders' => $orders,
             'selectedStatus' => $filter ?? '',
             'errors' => $errors,
@@ -85,7 +85,7 @@ class AdminOrderController extends Controller
         }
 
         http_response_code(400);
-        echo '400 - Invalid CSRF token';
+        echo '400 - Token CSRF tidak valid.';
         return false;
     }
 }

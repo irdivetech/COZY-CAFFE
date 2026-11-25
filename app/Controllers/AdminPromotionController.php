@@ -37,7 +37,7 @@ class AdminPromotionController extends Controller
         $promotion = $id ? $this->promotions->find((int) $id) : null;
         if (!$promotion) {
             http_response_code(404);
-            echo '404 - Promotion not found';
+            echo '404 - Promosi tidak ditemukan.';
             return;
         }
 
@@ -75,7 +75,7 @@ class AdminPromotionController extends Controller
         $existing = $id ? $this->promotions->find((int) $id) : null;
         if (!$existing) {
             http_response_code(404);
-            echo '404 - Promotion not found';
+            echo '404 - Promosi tidak ditemukan.';
             return;
         }
 
@@ -103,7 +103,7 @@ class AdminPromotionController extends Controller
         $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT);
         if (!$id || !$this->promotions->find((int) $id)) {
             http_response_code(404);
-            echo '404 - Promotion not found';
+            echo '404 - Promosi tidak ditemukan.';
             return;
         }
 
@@ -200,7 +200,7 @@ class AdminPromotionController extends Controller
     private function render(?array $formData = null, array $errors = []): void
     {
         $this->view('admin/promotions', [
-            'pageTitle' => 'Manage Promotions',
+            'pageTitle' => 'Kelola Promosi',
             'promotions' => $this->promotions->all(),
             'formData' => $formData,
             'menuOptions' => $this->promotions->menuOptions(),
@@ -225,7 +225,7 @@ class AdminPromotionController extends Controller
         }
 
         http_response_code(400);
-        echo '400 - Invalid CSRF token';
+        echo '400 - Token CSRF tidak valid.';
         return false;
     }
 }

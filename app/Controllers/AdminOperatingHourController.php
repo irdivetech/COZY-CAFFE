@@ -20,7 +20,7 @@ class AdminOperatingHourController extends Controller
         AuthHelper::requireAdmin();
         if (!SecurityHelper::verifyCsrfToken()) {
             http_response_code(400);
-            echo '400 - Invalid CSRF token';
+            echo '400 - Token CSRF tidak valid.';
             return;
         }
 
@@ -102,7 +102,7 @@ class AdminOperatingHourController extends Controller
     private function render(array $hours, array $errors = []): void
     {
         $this->view('admin/operating_hours', [
-            'pageTitle' => 'Operating Hours',
+            'pageTitle' => 'Jam Operasional',
             'hours' => $hours,
             'errors' => $errors,
         ]);

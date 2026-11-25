@@ -19,7 +19,7 @@ class AuthHelper
 
         if (($_SESSION['user']['role'] ?? '') !== 'admin') {
             http_response_code(403);
-            echo '403 - Forbidden';
+            echo '403 - Akses ditolak. Silakan login dengan akun yang memiliki hak akses.';
             exit;
         }
     }
@@ -30,7 +30,7 @@ class AuthHelper
 
         if (($_SESSION['user']['role'] ?? '') !== 'customer') {
             http_response_code(403);
-            echo '403 - Forbidden';
+            echo '403 - Akses ditolak. Silakan login dengan akun yang memiliki hak akses.';
             exit;
         }
     }

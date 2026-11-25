@@ -264,11 +264,11 @@ INSERT INTO users (name, email, phone, password, role) VALUES
      '$2y$10$dYdn4yjBby2/RDYq8Yo4mu690xYXESbpsijWf2jUfzRJw.D9vbVU2', 'customer');
 
 INSERT INTO categories (name, description) VALUES
-    ('Coffee', 'Coffee-based beverages'),
-    ('Non-Coffee', 'Tea, chocolate, and other non-coffee drinks'),
-    ('Foods', 'Main dishes and meals'),
-    ('Snacks', 'Light bites and snacks'),
-    ('Desserts', 'Sweet desserts');
+    ('Coffee', 'Minuman olahan kopi pilihan spesial, hangat dan dingin'),
+    ('Non-Coffee', 'Teh, cokelat, dan aneka minuman non-kopi pilihan'),
+    ('Foods', 'Hidangan utama dan makanan berat lezat'),
+    ('Snacks', 'Camilan dan kudapan ringan renyah'),
+    ('Desserts', 'Hidangan penutup dan pencuci mulut manis');
 
 INSERT INTO operating_hours
     (day_of_week, open_time, close_time, is_closed)

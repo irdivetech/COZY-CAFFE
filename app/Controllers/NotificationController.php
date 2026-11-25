@@ -7,7 +7,7 @@ class NotificationController extends Controller
         AuthHelper::requireCustomer();
         $user = AuthHelper::currentUser();
         $this->view('customer/notifications', [
-            'pageTitle' => 'Notifications',
+            'pageTitle' => 'Notifikasi',
             'notifications' => NotificationHelper::forUser((int) $user['id']),
             'currentUser' => $user,
             'cartCount' => (new CartModel())->itemCount((int) $user['id']),
@@ -18,7 +18,7 @@ class NotificationController extends Controller
     {
         AuthHelper::requireAdmin();
         $this->view('admin/notifications', [
-            'pageTitle' => 'Admin Notifications',
+            'pageTitle' => 'Notifikasi Admin',
             'notifications' => NotificationHelper::forUser((int) AuthHelper::currentUser()['id']),
         ]);
     }
@@ -51,7 +51,7 @@ class NotificationController extends Controller
     {
         if (!SecurityHelper::verifyCsrfToken()) {
             http_response_code(400);
-            echo '400 - Invalid CSRF token';
+            echo '400 - Token CSRF tidak valid.';
             return;
         }
 
@@ -73,7 +73,7 @@ class NotificationController extends Controller
     {
         if (!SecurityHelper::verifyCsrfToken()) {
             http_response_code(400);
-            echo '400 - Invalid CSRF token';
+            echo '400 - Token CSRF tidak valid.';
             return;
         }
 

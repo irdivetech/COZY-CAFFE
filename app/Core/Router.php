@@ -42,7 +42,7 @@ class Router
 
         if (!isset($this->routes[$method][$path])) {
             http_response_code(404);
-            echo '404 - Page not found';
+            echo '404 - Halaman tidak ditemukan.';
             return;
         }
 
@@ -50,7 +50,7 @@ class Router
 
         if (!class_exists($controllerClass)) {
             http_response_code(500);
-            echo '500 - Controller not found';
+            echo '500 - Controller tidak ditemukan.';
             return;
         }
 
@@ -58,7 +58,7 @@ class Router
 
         if (!method_exists($controller, $methodName)) {
             http_response_code(500);
-            echo '500 - Controller method not found';
+            echo '500 - Method controller tidak ditemukan.';
             return;
         }
 

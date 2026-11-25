@@ -30,7 +30,7 @@ class AdminReportController extends Controller
         }
 
         $this->view('admin/reports', [
-            'pageTitle' => 'Reports',
+            'pageTitle' => 'Laporan Penjualan & Reservasi',
             'startDate' => $startDate,
             'endDate' => $endDate,
             'errors' => $errors,

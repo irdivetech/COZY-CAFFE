@@ -6,7 +6,7 @@ class HomeController extends Controller
     {
         $currentUser = AuthHelper::currentUser();
         $this->view('customer/home', [
-            'pageTitle' => 'A Cozy Place, A Better Taste',
+            'pageTitle' => 'Beranda - CozyCafe',
             'featuredMenus' => (new Menu())->featured(6),
             'currentUser' => $currentUser,
             'cartCount' => ($currentUser['role'] ?? '') === 'customer'

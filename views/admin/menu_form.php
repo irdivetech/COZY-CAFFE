@@ -1,5 +1,6 @@
 <?php
-$pageTitle = $pageTitle ?? 'Add Menu';
+$isEdit = !empty($menu['id']);
+$pageTitle = $isEdit ? 'Ubah Menu' : 'Tambah Menu Baru';
 $menu = $menu ?? [];
 $categories = $categories ?? [];
 $errors = $errors ?? [];
@@ -9,58 +10,64 @@ $baseUrl = rtrim(str_replace('/index.php', '', $_SERVER['SCRIPT_NAME'] ?? ''), '
 if ($baseUrl === '/') {
     $baseUrl = '';
 }
-$editing = !empty($menu['id']);
+$action = $isEdit ? '/admin/menus/update' : '/admin/menus/create';
 ob_start();
 ?>
-<div class="container-fluid py-2" style="max-width: 1000px;">
+<div class="container-fluid py-2" style="max-width: 850px;">
     <h1 class="section-title h2 mb-4"><?= $escape($pageTitle) ?></h1>
     <?php if ($errors): ?>
         <div class="alert alert-danger" role="alert">
-            <ul class="mb-0"><?php foreach ($errors as $error): ?><li><?= $escape($error) ?></li><?php endforeach; ?></ul>
+            <ul class="mb-0 ps-3"><?php foreach ($errors as $error): ?><li><?= $escape($error) ?></li><?php endforeach; ?></ul>
         </div>
     <?php endif; ?>
-    <section class="cozy-card">
-        <form method="post" enctype="multipart/form-data" action="<?= $escape($baseUrl) ?>/admin/menus/<?= $editing ? 'update' : 'create' ?>" class="p-4">
+
+    <section class="cozy-card p-4">
+        <form method="post" action="<?= $escape($baseUrl) ?><?= $action ?>" enctype="multipart/form-data">
             <input type="hidden" name="_csrf_token" value="<?= $escape(SecurityHelper::generateCsrfToken()) ?>">
-            <?php if ($editing): ?><input type="hidden" name="id" value="<?= (int) $menu['id'] ?>"><?php endif; ?>
+            <?php if ($isEdit): ?>
+                <input type="hidden" name="id" value="<?= (int) $menu['id'] ?>">
+            <?php endif; ?>
+
             <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label" for="name">Menu name</label>
-                    <input class="form-control" id="name" name="name" maxlength="150" value="<?= $escape($menu['name'] ?? '') ?>" required>
+                <div class="col-md-7">
+                    <label class="form-label fw-semibold" for="name">Nama Menu</label>
+                    <input class="form-control" id="name" name="name" maxlength="150" value="<?= $escape($menu['name'] ?? '') ?>" placeholder="Contoh: Caramel Macchiato" required>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label" for="category_id">Category</label>
+                <div class="col-md-5">
+                    <label class="form-label fw-semibold" for="category_id">Kategori Menu</label>
                     <select class="form-select" id="category_id" name="category_id" required>
-                        <option value="">Select category</option>
-                        <?php foreach ($categories as $category): ?>
-                            <option value="<?= (int) $category['id'] ?>" <?= (string) ($menu['category_id'] ?? '') === (string) $category['id'] ? 'selected' : '' ?>><?= $escape($category['name']) ?></option>
+                        <option value="">-- Pilih Kategori --</option>
+                        <?php foreach ($categories as $cat): ?>
+                            <option value="<?= (int) $cat['id'] ?>" <?= ((int) ($menu['category_id'] ?? 0)) === (int) $cat['id'] ? 'selected' : '' ?>>
+                                <?= $escape($cat['name']) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label" for="price">Price (Rp)</label>
-                    <input class="form-control" id="price" name="price" type="number" min="0.01" max="99999999.99" step="0.01" value="<?= $escape((string) ($menu['price'] ?? '')) ?>" required>
+                <div class="col-12">
+                    <label class="form-label fw-semibold" for="description">Deskripsi Menu</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Jelaskan bahan, rasa, atau keunikan menu..."><?= $escape($menu['description'] ?? '') ?></textarea>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label" for="image">Menu photo (JPG, PNG, WEBP; max 2MB)</label>
-                    <input class="form-control" id="image" name="image" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+                    <label class="form-label fw-semibold" for="price">Harga (Rp)</label>
+                    <input class="form-control" id="price" name="price" type="number" step="0.01" min="0" max="99999999.99" value="<?= $escape($menu['price'] ?? '') ?>" placeholder="25000" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold" for="image">Foto Menu (JPG/PNG/WEBP, Maks 2MB)</label>
+                    <input class="form-control" id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp">
                     <?php if (!empty($menu['image'])): ?>
-                        <div class="small text-muted mt-2">Current photo: <?= $escape(basename($menu['image'])) ?></div>
+                        <div class="small text-muted mt-1">Foto saat ini: <?= $escape(basename($menu['image'])) ?></div>
                     <?php endif; ?>
                 </div>
                 <div class="col-12">
-                    <label class="form-label" for="description">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="4"><?= $escape($menu['description'] ?? '') ?></textarea>
-                </div>
-                <div class="col-12">
-                    <div class="form-check">
-                        <input class="form-check-input" id="is_available" name="is_available" type="checkbox" value="1" <?= !array_key_exists('is_available', $menu) || !empty($menu['is_available']) ? 'checked' : '' ?>>
-                        <label class="form-check-label" for="is_available">Available to customers</label>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" id="is_available" name="is_available" value="1" <?= !isset($menu['is_available']) || $menu['is_available'] ? 'checked' : '' ?>>
+                        <label class="form-check-label" for="is_available">Tersedia untuk dipesan pelanggan</label>
                     </div>
                 </div>
-                <div class="col-12">
-                    <button class="btn btn-coffee" type="submit"><?= $editing ? 'Save Changes' : 'Add Menu' ?></button>
-                    <a class="btn btn-outline-coffee" href="<?= $escape($baseUrl) ?>/admin/menus">Cancel</a>
+                <div class="col-12 mt-4 d-flex gap-2">
+                    <button class="btn btn-coffee" type="submit"><i class="fa-solid fa-floppy-disk me-1"></i>Simpan Menu</button>
+                    <a class="btn btn-outline-coffee" href="<?= $escape($baseUrl) ?>/admin/menus">Batal</a>
                 </div>
             </div>
         </form>
